@@ -5,6 +5,9 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.Map;
+
+import hai913i.tp2.calculs.CouplingAnalyzer;
 
 /**
  * Point d'entrée du squelette : vérifie l'environnement et charge les faits.
@@ -103,10 +106,10 @@ public final class Main {
         }
 
         OUT.println("Dossier des faits   : " + dir.toAbsolutePath());
-        OUT.println("Jeu de données      : " + prefix);
+        OUT.println("Jeu de donnees      : " + prefix);
         OUT.printf(Locale.ROOT, "Classes             : %d%n",
                 facts.classes().size());
-        OUT.printf(Locale.ROOT, "Méthodes            : %d%n",
+        OUT.printf(Locale.ROOT, "Methodes            : %d%n",
                 facts.methodOwners().size());
         OUT.printf(Locale.ROOT, "Arcs du graphe      : %d%n",
                 facts.calls().size());
@@ -115,6 +118,12 @@ public final class Main {
         // TODO étape A1 : écarter les arcs intra-classe, agréger les arcs
         //                 restants par couple de classes distinctes, puis
         //                 calculer C(A, B) = r(A, B) / |E_inter|.
+
+        CouplingAnalyzer.analyzeCoupling(facts);
+
+        Map<String, Integer> R = CouplingAnalyzer.computeR(facts);
+
+
         // TODO étape A2 : construire et exporter le graphe de couplage pondéré.
         // TODO étape B1 : regroupement hiérarchique ascendant, lien moyen,
         //                 égalités départagées comme le sujet l'impose.
@@ -122,7 +131,7 @@ public final class Main {
         // TODO étape B3 : couper l'arbre sous les trois contraintes, puis
         //                 vérifier la contrainte M/2 et signaler sa violation.
         OUT.println();
-        OUT.println("Faits chargés. Les étapes A1 à B3 restent à écrire.");
+        OUT.println("Faits charges. Les etapes A1 a B3 restent a acrire.");
     }
 
     /**
@@ -134,16 +143,16 @@ public final class Main {
         ERR.println("Erreur : " + message);
         ERR.println();
         ERR.println("Usage : java -jar hai913i-tp2.jar <dossier-des-faits>"
-                + " [--cp <valeur>] [--prefix <préfixe>]");
+                + " [--cp <valeur>] [--prefix <prefixe>]");
         ERR.println();
         ERR.println("  <dossier-des-faits>  dossier contenant les trois fichiers");
-        ERR.println("                       <préfixe>-classes.csv,");
-        ERR.println("                       <préfixe>-methods.csv et");
-        ERR.println("                       <préfixe>-calls.csv");
+        ERR.println("                       <prefixe>-classes.csv,");
+        ERR.println("                       <prefixe>-methods.csv et");
+        ERR.println("                       <prefixe>-calls.csv");
         ERR.println("  --cp <valeur>        seuil de couplage interne moyen"
-                + " (défaut : " + CP_DEFAUT + ")");
-        ERR.println("  --prefix <préfixe>   force le préfixe ; par défaut il est");
-        ERR.println("                       déduit du dossier");
+                + " (defaut : " + CP_DEFAUT + ")");
+        ERR.println("  --prefix <prefixe>   force le prefixe ; par defaut il est");
+        ERR.println("                       deduit du dossier");
         System.exit(1);
     }
 }
