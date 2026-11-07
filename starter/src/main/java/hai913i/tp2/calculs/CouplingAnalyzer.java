@@ -1,6 +1,7 @@
 package hai913i.tp2.calculs;
 
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,8 @@ import java.util.Set;
 
 import hai913i.tp2.Facts;
 import hai913i.tp2.Facts.CallArc;
+import hai913i.tp2.Facts.ClassInfo;
+import hai913i.tp2.models.Couple;
 
 public class CouplingAnalyzer {
 
@@ -25,7 +28,7 @@ public class CouplingAnalyzer {
     *
     * @param facts les faits à analyser 
     */
-    public static void analyzeCoupling(Facts facts) {
+    public static int analyzeCoupling(Facts facts) {
        
         for (CallArc call : facts.calls()) {
             String caller = call.callerClass();
@@ -46,6 +49,7 @@ public class CouplingAnalyzer {
         System.out.println("Nombre d'arcs inter-classes (|E_inter|) : " + arcsInterClasse);
         System.out.println("Nombre de couples de classes uniques   : " + couplesUniques.size());
         System.out.println("Nombre d'arcs intra-classe             : " + arcsIntraClasse);
+    return arcsInterClasse;
     }
 
 
@@ -56,27 +60,23 @@ public class CouplingAnalyzer {
      * @implNote la méthode <b>computeCoupling()</b> est appelée pour calculer le couplage entre les classes et afficher les résultats.<br>
      * @param facts les faits à analyser
      */
+   
+
     public static Map<String, Integer> computeR(Facts facts) {
         Map<String, Integer> R = new HashMap<>();
-        int eInter=0;
 
-       for(CallArc call : facts.calls()) {
+        for (CallArc call : facts.calls()) {
             String caller = call.callerClass();
             String callee = call.calleeClass();
 
-            if (!caller.equals(callee)) {
-                // clé non ordonnée : A→B et B→A donnent la même clé
-                String cle = (caller.compareTo(callee) < 0)
-                        ? caller + " | " + callee
-                        : callee + " | " + caller;
+            if (caller.equals(callee)) continue;   // écarter intra-classe
 
-                R.put(cle, R.getOrDefault(cle, 0) + 1);
-                eInter++;
-            }
+            String cle = (caller.compareTo(callee) < 0)
+                    ? caller + "|" + callee
+                    : callee + "|" + caller;
+
+            R.merge(cle, 1, Integer::sum);
         }
-              
-        //On calcule le couplage entre les classes et on affiche les résultats
-        computeCoupling(R, eInter);
         return R;
     }
     
@@ -87,22 +87,72 @@ public class CouplingAnalyzer {
     * @param eInter le nombre total d'arcs inter-classes (|E_inter|)
     *    
     */
-    public static void computeCoupling(Map<String, Integer> R, int eInter) {
-    List<Map.Entry<String, Integer>> entries = new ArrayList<>(R.entrySet());
-    entries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
-    double cTotal = 0.0;
-    for (Map.Entry<String, Integer> entry : entries) {
-        String cle = entry.getKey();
-        int r = entry.getValue();
-        double c = (double) r / eInter;
-        cTotal += c;
-        System.out.printf("Couple de classes : %s \t| r(A,B) = %d \t| C(A,B) = %.4f%n",cle, r, c);
+    public static Map<Couple, Double> computeCoupling(Map<String, Integer> R, int eInter) {
+        Map<Couple, Double> couplingValues = new HashMap<>();
+        
+        for (Map.Entry<String, Integer> entry : R.entrySet()) {
+            String[] parts = entry.getKey().split("\\|");
+            Couple couple = new Couple(parts[0], parts[1]);
+            double c = (double) entry.getValue() / eInter;
+            couplingValues.put(couple, c);
+        }
+        return couplingValues;
     }
 
-    System.out.printf("Couplage total des %d classes : %.4f%n", entries.size(), cTotal);
-
+    public static void printCouplingSorted(Map<Couple, Double> coupling) {
+        List<Map.Entry<Couple, Double>> list = new ArrayList<>(coupling.entrySet());
+        list.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));  // décroissant
+        double cTotal = 0.0;
+        for (Map.Entry<Couple, Double> e : list) {
+            cTotal += e.getValue();
+            System.out.printf("Couplage entre %s --> %s : %.4f%n",
+                    e.getKey().source, e.getKey().target, e.getValue());
+        }
+        System.out.printf("Couplage total : %.4f%n", cTotal);
     }
 
+    public static List<String> computeIsolatedClasses(Map<Couple, Double> coupling,Facts facts) {
+        
+        List<String> isolatedClasses = new ArrayList<>();
+        for (ClassInfo fact : facts.classes()) {
+            String className = fact.name();
+            if(!coupling.keySet().stream().anyMatch(c -> c.source.equals(className) || c.target.equals(className))) {
+                isolatedClasses.add(className);
 
+            }
+        }
+        return isolatedClasses;
+    }
+    public static void printCouplingGraph(Map<Couple, Double> coupling, Facts facts) {
+
+        System.out.println("=== Graphe de couplage pondéré ===");
+        for (CallArc call : facts.calls()) {
+            String caller = call.callerClass();
+            String callee = call.calleeClass();
+
+            if (caller.equals(callee)) {
+                arcsIntraClasse++;
+            } else {
+                arcsInterClasse++;
+                // clé non ordonnée : A→B et B→A donnent la même clé
+                String cle = (caller.compareTo(callee) < 0)
+                        ? caller + "|" + callee
+                        : callee + "|" + caller;
+                couplesUniques.add(cle);
+            }
+        }
+    }
+
+    public static void printTop5(Map<Couple, Double> coupling) {
+        List<Map.Entry<Couple, Double>> list = new ArrayList<>(coupling.entrySet());
+        list.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        System.out.println("=== TOP 5 ===");
+        int n = Math.min(5, list.size());
+        for (int i = 0; i < n; i++) {
+            Map.Entry<Couple, Double> e = list.get(i);
+            System.out.printf("%d. %s --> %s \t| C = %.4f%n", i + 1, e.getKey().source , e.getKey().target, e.getValue());
+        }
+    }
 
 }

@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import hai913i.tp2.calculs.CouplingAnalyzer;
+import hai913i.tp2.models.Couple;
 
 /**
  * Point d'entrée du squelette : vérifie l'environnement et charge les faits.
@@ -119,10 +121,19 @@ public final class Main {
         //                 restants par couple de classes distinctes, puis
         //                 calculer C(A, B) = r(A, B) / |E_inter|.
 
-        CouplingAnalyzer.analyzeCoupling(facts);
+        //en analysant les couplage on retourne le eInter
+        int eInter = CouplingAnalyzer.analyzeCoupling(facts); 
 
         Map<String, Integer> R = CouplingAnalyzer.computeR(facts);
 
+        Map<Couple, Double> coupling = CouplingAnalyzer.computeCoupling(R, eInter);
+        
+        CouplingAnalyzer.printCouplingSorted(coupling);
+
+        CouplingAnalyzer.printTop5(coupling);
+
+        List<String> isolatedClasses = CouplingAnalyzer.computeIsolatedClasses(coupling, facts);
+        System.out.println("Classes isolées : " + isolatedClasses);
 
         // TODO étape A2 : construire et exporter le graphe de couplage pondéré.
         // TODO étape B1 : regroupement hiérarchique ascendant, lien moyen,
