@@ -7,4 +7,12 @@ public class Couple {
         this.source = src;
         this.target = target;
     }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getTarget() {
+        return target;
+    }
 }

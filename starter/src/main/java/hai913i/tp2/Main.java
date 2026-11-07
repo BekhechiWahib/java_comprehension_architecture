@@ -9,7 +9,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import hai913i.tp2.calculs.CouplingAnalyzer;
+import hai913i.tp2.graphs.CouplingGraphGenerator;
 import hai913i.tp2.models.Couple;
+import hai913i.tp2.models.CouplingGraph;
+import hai913i.tp2.utils.DotGenerator;
 
 /**
  * Point d'entrée du squelette : vérifie l'environnement et charge les faits.
@@ -132,10 +135,19 @@ public final class Main {
 
         CouplingAnalyzer.printTop5(coupling);
 
-        List<String> isolatedClasses = CouplingAnalyzer.computeIsolatedClasses(coupling, facts);
-        System.out.println("Classes isolées : " + isolatedClasses);
+       
+
 
         // TODO étape A2 : construire et exporter le graphe de couplage pondéré.
+
+         List<String> isolatedClasses = CouplingAnalyzer.computeIsolatedClasses(coupling, facts);
+         System.out.println("\n==== Classes isolées ==== \n");
+         System.out.println("Classes isolées : " + isolatedClasses);
+
+         CouplingGraph.printGraph(CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
+
+         DotGenerator.toDot(CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
+         
         // TODO étape B1 : regroupement hiérarchique ascendant, lien moyen,
         //                 égalités départagées comme le sujet l'impose.
         // TODO étape B2 : représenter et exporter le dendrogramme.

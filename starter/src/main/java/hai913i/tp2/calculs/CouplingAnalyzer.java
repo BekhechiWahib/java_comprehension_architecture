@@ -46,9 +46,9 @@ public class CouplingAnalyzer {
             }
         }
 
-        System.out.println("Nombre d'arcs inter-classes (|E_inter|) : " + arcsInterClasse);
+        System.out.println("\nNombre d'arcs inter-classes (|E_inter|) : " + arcsInterClasse);
         System.out.println("Nombre de couples de classes uniques   : " + couplesUniques.size());
-        System.out.println("Nombre d'arcs intra-classe             : " + arcsIntraClasse);
+        System.out.println("Nombre d'arcs intra-classe             : " + arcsIntraClasse +"\n");
     return arcsInterClasse;
     }
 
@@ -103,6 +103,7 @@ public class CouplingAnalyzer {
         List<Map.Entry<Couple, Double>> list = new ArrayList<>(coupling.entrySet());
         list.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));  // décroissant
         double cTotal = 0.0;
+        System.out.println("\n=== Couplage entre les classes distinctes ===\n");
         for (Map.Entry<Couple, Double> e : list) {
             cTotal += e.getValue();
             System.out.printf("Couplage entre %s --> %s : %.4f%n",
@@ -112,7 +113,7 @@ public class CouplingAnalyzer {
     }
 
     public static List<String> computeIsolatedClasses(Map<Couple, Double> coupling,Facts facts) {
-        
+
         List<String> isolatedClasses = new ArrayList<>();
         for (ClassInfo fact : facts.classes()) {
             String className = fact.name();
@@ -147,7 +148,7 @@ public class CouplingAnalyzer {
         List<Map.Entry<Couple, Double>> list = new ArrayList<>(coupling.entrySet());
         list.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
 
-        System.out.println("=== TOP 5 ===");
+        System.out.println("\n=== TOP 5 ===\n");
         int n = Math.min(5, list.size());
         for (int i = 0; i < n; i++) {
             Map.Entry<Couple, Double> e = list.get(i);
