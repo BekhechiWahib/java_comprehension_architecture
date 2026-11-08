@@ -1,0 +1,38 @@
+graph couplingGraph {
+  layout=neato;
+  node [shape=box, fontsize=10];
+  "library.model.Item";
+  "library.model.Member";
+  "library.app.LibraryApp";
+  "library.service.LoanService.Loan";
+  "library.service.LoanService";
+  "library.util.TextUtils";
+  "library.service.Catalog";
+  "library.model.Book";
+  "library.util.Statistics";
+  "library.service.Notifier";
+  "library.model.Loanable";
+  "library.model.Category";
+  "library.service.ConsoleNotifier";
+  "library.model.Dvd";
+  "library.service.LoanException";
+  "library.model.Item" -- "library.model.Member" [label="0,054"];
+  "library.app.LibraryApp" -- "library.service.LoanService.Loan" [label="0,054"];
+  "library.service.LoanService" -- "library.util.TextUtils" [label="0,027"];
+  "library.app.LibraryApp" -- "library.model.Item" [label="0,081"];
+  "library.app.LibraryApp" -- "library.service.Catalog" [label="0,081"];
+  "library.model.Book" -- "library.model.Item" [label="0,027"];
+  "library.app.LibraryApp" -- "library.util.Statistics" [label="0,027"];
+  "library.util.Statistics" -- "library.util.TextUtils" [label="0,054"];
+  "library.model.Item" -- "library.service.Catalog" [label="0,054"];
+  "library.app.LibraryApp" -- "library.service.LoanService" [label="0,081"];
+  "library.app.LibraryApp" -- "library.model.Book" [label="0,027"];
+  "library.service.LoanService" -- "library.service.Notifier" [label="0,054"];
+  "library.model.Loanable" -- "library.service.LoanService" [label="0,027"];
+  "library.model.Item" -- "library.service.LoanService" [label="0,108"];
+  "library.model.Category" -- "library.model.Item" [label="0,027"];
+  "library.model.Member" -- "library.service.LoanService" [label="0,054"];
+  "library.service.Catalog" -- "library.service.LoanService" [label="0,027"];
+  "library.model.Member" -- "library.service.ConsoleNotifier" [label="0,027"];
+  "library.service.LoanService" -- "library.service.LoanService.Loan" [label="0,108"];
+}

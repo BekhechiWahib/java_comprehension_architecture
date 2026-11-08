@@ -3,15 +3,18 @@ package hai913i.tp2;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import hai913i.tp2.calculs.CouplingAnalyzer;
+import hai913i.tp2.calculs.GroupComposition;
 import hai913i.tp2.graphs.CouplingGraphGenerator;
 import hai913i.tp2.models.Couple;
 import hai913i.tp2.models.CouplingGraph;
+import hai913i.tp2.models.Groupe;
 import hai913i.tp2.utils.DotGenerator;
 
 /**
@@ -120,7 +123,7 @@ public final class Main {
                 facts.calls().size());
         OUT.printf(Locale.ROOT, "Seuil CP retenu     : %.4f%n", cp);
 
-        // TODO étape A1 : écarter les arcs intra-classe, agréger les arcs
+        //!  étape A1 : écarter les arcs intra-classe, agréger les arcs
         //                 restants par couple de classes distinctes, puis
         //                 calculer C(A, B) = r(A, B) / |E_inter|.
 
@@ -138,18 +141,47 @@ public final class Main {
        
 
 
-        // TODO étape A2 : construire et exporter le graphe de couplage pondéré.
+        //!  étape A2 : construire et exporter le graphe de couplage pondéré.
 
-         List<String> isolatedClasses = CouplingAnalyzer.computeIsolatedClasses(coupling, facts);
-         System.out.println("\n==== Classes isolées ==== \n");
-         System.out.println("Classes isolées : " + isolatedClasses);
+        List<String> isolatedClasses = CouplingAnalyzer.computeIsolatedClasses(coupling, facts);
+        System.out.println("\n==== Classes isolées ==== \n");
+        System.out.println("Classes isolées : " + isolatedClasses);
 
-         CouplingGraph.printGraph(CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
+        CouplingGraph.printGraph(CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
 
-         DotGenerator.toDot(CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
-         
+        String dot = DotGenerator.toDot(
+                CouplingGraphGenerator.generateGraph(coupling, isolatedClasses));
+
+       try {
+            Path saveDir = Path.of("src/exports");
+            Files.createDirectories(saveDir);
+            Path file = saveDir.resolve("couplage.dot");
+            Files.writeString(file, dot);
+            System.out.println("DOT écrit avec success !");
+        } catch (IOException e) {
+            System.err.println("Erreur d'écriture du DOT : " + e.getMessage());
+            e.printStackTrace();
+        }         
+
+
         // TODO étape B1 : regroupement hiérarchique ascendant, lien moyen,
         //                 égalités départagées comme le sujet l'impose.
+
+        List<CouplingGraph> graph = CouplingGraphGenerator.generateGraph(coupling, isolatedClasses);
+        List<Groupe> groups = GroupComposition.initialization(graph);
+
+        GroupComposition.createGroup(groups, graph);
+
+       /*  System.out.println("\n==== Groupes initiaux ==== \n");
+        for (Groupe g : groups) {
+            System.out.println("Groupe " + g.name + ":");
+            System.out.println("  Taille: " + g.size);
+            System.out.println("  Ordre d'ajout: " + g.addOrder);
+            System.out.println("  Similarité: " + g.similarity);
+            System.out.println("  Classes: " + g.classes);
+        }
+*/
+
         // TODO étape B2 : représenter et exporter le dendrogramme.
         // TODO étape B3 : couper l'arbre sous les trois contraintes, puis
         //                 vérifier la contrainte M/2 et signaler sa violation.
