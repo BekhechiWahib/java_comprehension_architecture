@@ -1,0 +1,145 @@
+{
+  "id": 28,
+  "similarity": 0.0000,
+  "classes": ["library.util.Statistics", "library.util.TextUtils", "library.model.Loanable", "library.model.Category", "library.model.Book", "library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog", "library.model.Dvd", "library.service.LoanException"],
+  "left":   {
+    "id": 26,
+    "similarity": 0.0025,
+    "classes": ["library.util.Statistics", "library.util.TextUtils", "library.model.Loanable", "library.model.Category", "library.model.Book", "library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+    "left":     {
+      "id": 18,
+      "similarity": 0.0541,
+      "classes": ["library.util.Statistics", "library.util.TextUtils"],
+      "left":       {
+        "id": 13,
+        "similarity": 0.0000,
+        "classes": ["library.util.Statistics"]
+      },
+      "right":       {
+        "id": 14,
+        "similarity": 0.0000,
+        "classes": ["library.util.TextUtils"]
+      }
+    },
+    "right":     {
+      "id": 25,
+      "similarity": 0.0027,
+      "classes": ["library.model.Loanable", "library.model.Category", "library.model.Book", "library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+      "left":       {
+        "id": 5,
+        "similarity": 0.0000,
+        "classes": ["library.model.Loanable"]
+      },
+      "right":       {
+        "id": 24,
+        "similarity": 0.0030,
+        "classes": ["library.model.Category", "library.model.Book", "library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+        "left":         {
+          "id": 2,
+          "similarity": 0.0000,
+          "classes": ["library.model.Category"]
+        },
+        "right":         {
+          "id": 23,
+          "similarity": 0.0068,
+          "classes": ["library.model.Book", "library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+          "left":           {
+            "id": 1,
+            "similarity": 0.0000,
+            "classes": ["library.model.Book"]
+          },
+          "right":           {
+            "id": 22,
+            "similarity": 0.0090,
+            "classes": ["library.model.Member", "library.service.ConsoleNotifier", "library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+            "left":             {
+              "id": 20,
+              "similarity": 0.0270,
+              "classes": ["library.model.Member", "library.service.ConsoleNotifier"],
+              "left":               {
+                "id": 6,
+                "similarity": 0.0000,
+                "classes": ["library.model.Member"]
+              },
+              "right":               {
+                "id": 8,
+                "similarity": 0.0000,
+                "classes": ["library.service.ConsoleNotifier"]
+              }
+            },
+            "right":             {
+              "id": 21,
+              "similarity": 0.0108,
+              "classes": ["library.service.Notifier", "library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+              "left":               {
+                "id": 12,
+                "similarity": 0.0000,
+                "classes": ["library.service.Notifier"]
+              },
+              "right":               {
+                "id": 19,
+                "similarity": 0.0406,
+                "classes": ["library.service.LoanService.Loan", "library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+                "left":                 {
+                  "id": 11,
+                  "similarity": 0.0000,
+                  "classes": ["library.service.LoanService.Loan"]
+                },
+                "right":                 {
+                  "id": 17,
+                  "similarity": 0.0608,
+                  "classes": ["library.model.Item", "library.service.LoanService", "library.app.LibraryApp", "library.service.Catalog"],
+                  "left":                   {
+                    "id": 15,
+                    "similarity": 0.1081,
+                    "classes": ["library.model.Item", "library.service.LoanService"],
+                    "left":                     {
+                      "id": 4,
+                      "similarity": 0.0000,
+                      "classes": ["library.model.Item"]
+                    },
+                    "right":                     {
+                      "id": 10,
+                      "similarity": 0.0000,
+                      "classes": ["library.service.LoanService"]
+                    }
+                  },
+                  "right":                   {
+                    "id": 16,
+                    "similarity": 0.0811,
+                    "classes": ["library.app.LibraryApp", "library.service.Catalog"],
+                    "left":                     {
+                      "id": 0,
+                      "similarity": 0.0000,
+                      "classes": ["library.app.LibraryApp"]
+                    },
+                    "right":                     {
+                      "id": 7,
+                      "similarity": 0.0000,
+                      "classes": ["library.service.Catalog"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "right":   {
+    "id": 27,
+    "similarity": 0.0000,
+    "classes": ["library.model.Dvd", "library.service.LoanException"],
+    "left":     {
+      "id": 3,
+      "similarity": 0.0000,
+      "classes": ["library.model.Dvd"]
+    },
+    "right":     {
+      "id": 9,
+      "similarity": 0.0000,
+      "classes": ["library.service.LoanException"]
+    }
+  }
+}

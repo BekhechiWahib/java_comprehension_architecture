@@ -11,10 +11,13 @@ import java.util.Map;
 
 import hai913i.tp2.calculs.CouplingAnalyzer;
 import hai913i.tp2.calculs.GroupComposition;
+import hai913i.tp2.calculs.TreeBuilder;
 import hai913i.tp2.graphs.CouplingGraphGenerator;
 import hai913i.tp2.models.Couple;
 import hai913i.tp2.models.CouplingGraph;
+import hai913i.tp2.models.Fusion;
 import hai913i.tp2.models.Groupe;
+import hai913i.tp2.models.Node;
 import hai913i.tp2.utils.DotGenerator;
 
 /**
@@ -164,25 +167,20 @@ public final class Main {
         }         
 
 
-        // TODO étape B1 : regroupement hiérarchique ascendant, lien moyen,
+        //! étape B1 : regroupement hiérarchique ascendant, lien moyen,
         //                 égalités départagées comme le sujet l'impose.
+        //! étape B2 : représenter et exporter le dendrogramme.
+    
 
         List<CouplingGraph> graph = CouplingGraphGenerator.generateGraph(coupling, isolatedClasses);
         List<Groupe> groups = GroupComposition.initialization(graph);
-
+        
         GroupComposition.createGroup(groups, graph);
 
-       /*  System.out.println("\n==== Groupes initiaux ==== \n");
-        for (Groupe g : groups) {
-            System.out.println("Groupe " + g.name + ":");
-            System.out.println("  Taille: " + g.size);
-            System.out.println("  Ordre d'ajout: " + g.addOrder);
-            System.out.println("  Similarité: " + g.similarity);
-            System.out.println("  Classes: " + g.classes);
-        }
-*/
 
-        // TODO étape B2 : représenter et exporter le dendrogramme.
+               
+
+
         // TODO étape B3 : couper l'arbre sous les trois contraintes, puis
         //                 vérifier la contrainte M/2 et signaler sa violation.
         OUT.println();
