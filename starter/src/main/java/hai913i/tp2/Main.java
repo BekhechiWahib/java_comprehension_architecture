@@ -191,15 +191,14 @@ public final class Main {
         OUT.println("\n===== Modules avec CP = "+ cp +" =====\n");
         for(Module mod : results){
             OUT.println("Module : " + mod.id + " (size :"+ mod.size + ", Couplage moyen : " + mod.internalCoupling +")");
-            OUT.println("Module Classes : " + mod.classeModule);
+            OUT.println("\tModule Classes : " + mod.classeModule);
         }
-
-        if (results.size() > 15 / 2) {
-           OUT.println("ALERTE : La contrainte M/2 est violee (" + results.size() + " modules > 7)");
-        } else if(results.size() < 15 / 2) {
-            OUT.println("ALERTE : La contrainte M/2 est violee (" + results.size() + " modules < 7)");
-        }else{
-            OUT.println("Contrainte M/2 respectee (" + results.size() + " modules)");
+        int M = racine.classes.size();
+        int maxModules = M / 2;
+        if (results.size() > maxModules) {
+           OUT.println("ALERTE : La contrainte M/2 est violee (" + results.size() + " modules > " + maxModules + ")");
+        } else {
+           OUT.println("Contrainte M/2 respectee (" + results.size() + " modules <= " + maxModules + ")");
         }
 
 
