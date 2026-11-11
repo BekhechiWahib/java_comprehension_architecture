@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,10 +16,10 @@ import hai913i.tp2.calculs.TreeBuilder;
 import hai913i.tp2.graphs.CouplingGraphGenerator;
 import hai913i.tp2.models.Couple;
 import hai913i.tp2.models.CouplingGraph;
-import hai913i.tp2.models.Fusion;
 import hai913i.tp2.models.Groupe;
-import hai913i.tp2.models.Node;
 import hai913i.tp2.utils.DotGenerator;
+import hai913i.tp2.models.Module;
+import hai913i.tp2.models.Node;
 
 /**
  * Point d'entrée du squelette : vérifie l'environnement et charge les faits.
@@ -181,8 +182,27 @@ public final class Main {
                
 
 
-        // TODO étape B3 : couper l'arbre sous les trois contraintes, puis
+        //! étape B3 : couper l'arbre sous les trois contraintes, puis
         //                 vérifier la contrainte M/2 et signaler sa violation.
+        List<Module> modules = new ArrayList<>();
+        Node racine = groups.get(0).node;
+
+        List<Module> results = TreeBuilder.cutModule(racine, cp, modules, coupling);
+        OUT.println("\n===== Modules avec CP = "+ cp +" =====\n");
+        for(Module mod : results){
+            OUT.println("Module : " + mod.id + " (size :"+ mod.size + ", Couplage moyen : " + mod.internalCoupling +")");
+            OUT.println("Module Classes : " + mod.classeModule);
+        }
+
+        if (results.size() > 15 / 2) {
+           OUT.println("ALERTE : La contrainte M/2 est violee (" + results.size() + " modules > 7)");
+        } else if(results.size() < 15 / 2) {
+            OUT.println("ALERTE : La contrainte M/2 est violee (" + results.size() + " modules < 7)");
+        }else{
+            OUT.println("Contrainte M/2 respectee (" + results.size() + " modules)");
+        }
+
+
         OUT.println();
         OUT.println("Faits charges. Les etapes A1 a B3 restent a acrire.");
     }
